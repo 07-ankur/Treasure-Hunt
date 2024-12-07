@@ -9,7 +9,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 5px;
+}
+
+.home-welcome{
+  margin-bottom: 15px;
 }
 
 .user-info {
@@ -106,6 +110,19 @@
   font-family: 'Arial', sans-serif;
   background-color: #f4f4f4;
   border-radius: 10px;
+  text-align: center;
+}
+
+.treasure-hunt-container h1{
+  color: crimson;
+}
+
+.treasure-hunt-container h2 span{
+  color: #4CAF50;
+}
+
+.chat-section{
+  text-align: left;
 }
 
 .game-stats {
@@ -219,9 +236,9 @@
 }
 
 .login-container {
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 40px 30px;
+  max-width: 500px;
+  margin: 0;
+  padding: 30px;
   background-color: #ffffff;
   border-radius: 12px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
@@ -251,7 +268,7 @@
 }
 
 .login-container input {
-  width: 100%;
+  width: 85%;
   padding: 12px 15px;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
@@ -364,7 +381,7 @@ body {
 }
 
 .register-container input {
-    width: 100%;
+    width: 85%;
     padding: 12px 15px;
     border: 1px solid #e0e0e0;
     border-radius: 8px;

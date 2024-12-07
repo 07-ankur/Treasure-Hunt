@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { AuthContext } from '../../context/authContext';
 import SocketService from '../../utils/socketService';
@@ -17,7 +17,7 @@ const TreasureHuntGame = () => {
 
   useEffect(() => {
     // Initialize socket connection and join the room
-    const socket = SocketService.connect();
+    SocketService.connect();
 
     if (user) {
       SocketService.joinRoom(roomId, user.username);
@@ -38,7 +38,7 @@ const TreasureHuntGame = () => {
                       y === gameState.treasureLocation?.y;
     
     const newGrid = [...gameState.grid];
-    newGrid[y][x] = isCorrect ? 'treasure' : 'miss';
+    newGrid[y][x] = isCorrect ? '👑' : '❌';
 
     setGameState(prev => ({
       ...prev,
@@ -79,7 +79,8 @@ const TreasureHuntGame = () => {
 
   return (
     <div className="treasure-hunt-container">
-      <h2>Treasure Hunt - Room: {roomId}</h2>
+      <h1>Treasure Hunt</h1>
+      <h2>Room ID: <span>{roomId}</span></h2>
       <div className="game-stats">
         <p>Score: {gameState.score}</p>
         <p>Attempts: {gameState.attempts}</p>
