@@ -16,7 +16,7 @@ const Home = () => {
 
   const handleCreateRoom = async (e) => {
     e.preventDefault();
-    setError(""); // Clear previous error messages
+    setError("");
 
     if (!roomId || !password) {
       setError("Room ID and password are required!");
@@ -26,7 +26,6 @@ const Home = () => {
     try {
       const response = await createRoom(roomId, password, userID, token);
 
-      // If the request is successful
       if (response.message === "Room created successfully") {
         navigate(`/room/${response.roomId}`);
       } else {
@@ -40,7 +39,7 @@ const Home = () => {
 
   const handleJoinRoom = async (e) => {
     e.preventDefault();
-    setError(""); // Clear previous error messages
+    setError("");
 
     if (!roomId || !password) {
       setError("Room ID and password are required!");
@@ -50,7 +49,6 @@ const Home = () => {
     try {
       const response = await joinRoom(roomId, password, userID, token);
 
-      // If the request is successful
       if (response.message === "Room joined successfully") {
         navigate(`/room/${response.roomId}`);
       } else {

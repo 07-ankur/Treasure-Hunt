@@ -12,6 +12,10 @@ class SocketService {
     this.socket.emit('joinRoom', { roomId, username });
   }
 
+  leaveRoom(roomId, username) {
+    this.socket.emit('leaveRoom', { roomId, username });
+  }
+
   sendMessage(roomId, message, username) {
     this.socket.emit('sendMessage', { roomId, message, username });
   }

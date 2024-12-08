@@ -7,7 +7,6 @@ const userDB = require("../models/userModal");
 const createRoom = asyncHandler(async (req, res) => {
   const { roomId, password, userId } = req.body;
 
-  // Validate input fields
   if (!roomId || !password || !userId) {
     res.status(400);
     throw new Error(
@@ -21,7 +20,6 @@ const createRoom = asyncHandler(async (req, res) => {
     throw new Error("User does not exist");
   }
 
-  // Check if room with the given roomId already exists
   const existingRoom = await roomDB.findOne({ roomId });
   if (existingRoom) {
     res.status(400);
@@ -31,31 +29,25 @@ const createRoom = asyncHandler(async (req, res) => {
   }
 
   try {
-    // Ensure userId is a valid ObjectId
     const userObjectId = new mongoose.Types.ObjectId(userId);
 
-    // Hash the room password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Create a new room object
     const newRoom = new roomDB({
       roomId,
       password: hashedPassword,
-      players: [userObjectId], // Use ObjectId for players
+      players: [userObjectId], 
     });
 
-    // Save the room to the database
     const savedRoom = await newRoom.save();
 
-    // Respond with success
     res.status(201).json({
       message: "Room created successfully",
       roomId: savedRoom.roomId,
     });
   } catch (error) {
-    // Handle unexpected errors
-    console.error(error); // Log the actual error for debugging
+    console.error(error); 
     res.status(500);
     throw new Error(
       "An error occurred while creating the room. Please try again later."
@@ -84,10 +76,8 @@ const joinRoom = asyncHandler(async (req, res) => {
       throw new Error("Password incorrect");
     }
 
-    // Convert userId to ObjectId
     const userObjectId = new mongoose.Types.ObjectId(userId);
 
-    // Add user to players
     findRoom.players.push(userObjectId);
     await findRoom.save();
 
@@ -96,7 +86,7 @@ const joinRoom = asyncHandler(async (req, res) => {
       roomId: findRoom.roomId,
     });
   } catch (error) {
-    console.error(error); // Log the actual error for debugging
+    console.error(error); 
     res.status(500);
     throw new Error(
       "An error occurred while joining the room. Please try again later."
@@ -104,4 +94,49 @@ const joinRoom = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { createRoom, joinRoom };
+const leaveRoom = asyncHandler(async (req, res) => {
+  const { roomId, userId } = req.body;
+
+  if (!roomId || !userId) {
+    res.status(400);
+    throw new Error("Please provide roomId and userId");
+  }
+
+  try {
+    const room = await roomDB.findOne({ roomId });
+    if (!room) {
+      res.status(404);
+      throw new Error("Room not found");
+    }
+
+    const userObjectId = new mongoose.Types.ObjectId(userId);
+
+    room.players = room.players.filter(
+      playerId => !playerId.equals(userObjectId)
+    );
+
+    await room.save();
+
+    if (room.players.length === 0) {
+      await roomDB.deleteOne({ roomId });
+      return res.status(200).json({
+        message: "Room left successfully and room deleted as no players remained",
+        roomId
+      });
+    }
+
+    res.status(200).json({
+      message: "Successfully left the room",
+      roomId,
+      remainingPlayers: room.players.length
+    });
+  } catch (error) {
+    console.error(error); 
+    res.status(500);
+    throw new Error(
+      "An error occurred while leaving the room. Please try again later."
+    );
+  }
+});
+
+module.exports = { createRoom, joinRoom, leaveRoom };

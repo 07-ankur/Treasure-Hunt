@@ -27,3 +27,16 @@ export const joinRoom = async (roomId, password, userID, token) => {
         throw error.response?.data || { message: 'Error joining room' };
     }
 };
+
+export const leaveRoom = async (roomId, userID, token) => {
+    try {
+        const response = await axios.post(
+            `${API_URL}/leave-room`,
+            { roomId, userId: userID },
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
+        return response.data;
+    } catch (error) {
+        throw error.response?.data || { message: 'Error leaving room' };
+    }
+};
