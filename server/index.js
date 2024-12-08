@@ -53,18 +53,15 @@ io.on('connection', (socket) => {
 
   socket.on('joinRoom', ({ roomId, username }) => {
     socket.join(roomId);
-    // Fixed template string and message format
     io.to(roomId).emit('message', `${username} has joined the room.`);
   });
 
   socket.on('leaveRoom', ({ roomId, username }) => {
     socket.leave(roomId);
-    // Fixed template string and message format
     io.to(roomId).emit('message', `${username} has left the room.`);
   }); 
 
   socket.on('sendMessage', ({ roomId, message, username }) => {
-    // Include username in the message emission
     io.to(roomId).emit('message', { username, message });
   });
 

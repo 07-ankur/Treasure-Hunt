@@ -39,30 +39,23 @@ const registerUser = asyncHandler(async(req, res)=>{
 const loginUser = asyncHandler(async (req, res) => {
   const { username, password } = req.body;
 
-  // Ensure both username and password are provided
   if (!username || !password) {
     res.status(400);
     throw new Error("Please enter all the details properly");
   }
-
-  // Find user in the database by username
   const findUser = await userDB.findOne({ username });
   if (!findUser) {
     res.status(404);
     throw new Error("User not found. Please register");
   }
-
-  // Compare passwords
   const isPasswordValid = await bcrypt.compare(password, findUser.password);
   if (!isPasswordValid) {
     res.status(401); // Unauthorized
     throw new Error("Password incorrect");
   }
 
-  // Generate JWT token
   const token = generateToken(findUser._id);
 
-  // Return response with user details and token
   res.status(200).json({
     message: "Login successful",
     user: {

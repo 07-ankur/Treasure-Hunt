@@ -2,11 +2,11 @@ import { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
 import SocketService from "../../utils/socketService";
-import { leaveRoom } from "../../services/roomService"; // Import the leaveRoom function
+import { leaveRoom } from "../../services/roomService"; 
 
 const TreasureHuntGame = () => {
   const { roomId } = useParams();
-  const navigate = useNavigate(); // Add navigation
+  const navigate = useNavigate(); 
   const { user, token } = useContext(AuthContext);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");

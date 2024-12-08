@@ -15,8 +15,7 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Basic validation
+
     if (password !== confirmPassword) {
       setError('Passwords do not match');
       return;
@@ -30,10 +29,8 @@ const Register = () => {
     try {
       const response = await register(username, email, password);
       
-      // Automatically log in after successful registration
       login(response.user, response.token);
-      
-      // Redirect to home page
+
       navigate('/home');
     } catch (err) {
       setError(err.message || 'Registration failed');

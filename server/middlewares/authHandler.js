@@ -7,21 +7,16 @@ const checkLogin = async (req, res, next) => {
     }
 
     try {
-        // Extract token
         const token = req.headers.authorization.split(' ')[1];
         
-        // Verify token
         const decoded = jwt.verify(token, process.env.JWTSECRET);
-        console.log("Decoded Token:", decoded); // Verify structure includes `id`
+        console.log("Decoded Token:", decoded);
         
-        // Find user by ID from decoded token
-        const user = await userDB.findById(decoded.id).select('-password'); // Use `id` from token
+        const user = await userDB.findById(decoded.id).select('-password'); 
         
         if (!user) {
             return res.status(401).json({ message: "User not found" });
         }
-
-        // Attach user to request object
         req.user = user;
         next();
 
